@@ -1,0 +1,21 @@
+default vesamenu.c32
+prompt 1
+timeout 60
+display boot.msg
+
+label linux
+  menu label ^Install Rocky-Linux 8 server kickstart
+  menu default
+  kernel vmlinuz
+  append initrd=initrd.img ip=dhcp inst.repo=http://{{ ansible_default_ipv4.address }}/os ks=http://{{ ansible_default_ipv4.address }}/init-config/{{ hostvars[item]['mac'] }}.ks
+
+label rescue
+  menu label ^Rescue installed system
+  kernel vmlinuz
+  append initrd=initrd.img rescue
+
+label local
+  menu label Boot from ^local drive
+  localboot 0xffff
+  
+

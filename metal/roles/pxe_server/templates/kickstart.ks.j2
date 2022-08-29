@@ -4,19 +4,26 @@
 text
 
 # Keyboard layouts
-keyboard --xlayouts='us'
+keyboard --xlayouts='de'
 # System language
 lang en_US.UTF-8
 
 # Partition clearing information
+#zerombr
 clearpart --all --drives={{ hostvars[item]['disk'] }}
-# Partitioning
 ignoredisk --only-use={{ hostvars[item]['disk'] }}
+#clearpart --drives={{ hostvars[item]['disk'] }} --all --initlabel --disklabel=gpt
+
+# Partitioning
+#autopart
+#partition /boot --fstype=vfat --size=1024
 partition /boot/efi --fstype=vfat --size=512
 partition / --fstype=ext4 --grow
 
 # Network information
-network --bootproto=static --device={{ hostvars[item]['network_interface'] }} --ip={{ hostvars[item]['ansible_host'] }} --gateway={{ ansible_default_ipv4.gateway }} --nameserver={{ dns_server }} --netmask={{ ansible_default_ipv4.netmask }} --ipv6=auto --hostname={{ hostvars[item]['inventory_hostname'] }} --activate
+#network --bootproto=static --device={{ hostvars[item]['network_interface'] }} --#ip={{ hostvars[item]['ansible_host'] }} --gateway={{ ansible_default_ipv4.gateway }} --#nameserver={{ dns_server }} --netmask={{ ansible_default_ipv4.netmask }} --ipv6=auto --#hostname={{ hostvars[item]['inventory_hostname'] }} --activate
+
+network --bootproto=static --device={{ hostvars[item]['network_interface'] }} --ip={{ hostvars[item]['ansible_host'] }} --gateway={{ ansible_default_ipv4.gateway }} --nameserver={{ ansible_default_ipv4.gateway }} --netmask={{ ansible_default_ipv4.netmask }} --ipv6=auto --hostname={{ hostvars[item]['inventory_hostname'] }} --activate
 
 # Use network installation
 repo --name="Repository" --baseurl=http://{{ ansible_default_ipv4.address }}/os
